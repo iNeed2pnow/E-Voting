@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Voting System</title>
+    <style>
+        /* CSS styles for the UI elements */
+        body {
+            background-color: #F2F2F2;
+            text-align: center;
+            font-family: Segoe UI, sans-serif;
+        }
+
+        h1 {
+            font-size: 32px;
+            margin: 20px 0;
+            color: #1779BA;
+        }
+
+        .tab-button {
+            display: inline-block;
+            width: 120px;
+            height: 40px;
+            background-color: #F2F2F2;
+            color: #000;
+            font-size: 16px;
+            margin: 10px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+            .tab-button.active {
+                background-color: #1779BA;
+                color: #FFF;
+            }
+
+            .tab-button:hover {
+                background-color: #C4E2F3;
+            }
+
+        .candidate-button {
+            display: inline-block;
+            width: 180px;
+            height: 60px;
+            background-color: #F2F2F2;
+            color: #000;
+            font-size: 18px;
+            margin: 10px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+            .candidate-button.active {
+                background-color: #1779BA;
+                color: #FFF;
+            }
+
+            .candidate-button:hover {
+                background-color: #C4E2F3;
+            }
+
+        .submit-button {
+            display: block;
+            width: 200px;
+            height: 40px;
+            background-color: #1779BA;
+            color: #FFF;
+            font-size: 18px;
+            margin: 20px auto;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+            .submit-button:hover {
+                background-color: #0C5DA5;
+            }
+
+        .success-message {
+            font-size: 18px;
+            color: #1779BA;
+            margin-top: 10px;
+        }
+
+        .error-message {
+            font-size: 18px;
+            color: #FF0000;
+            margin-top: 10px;
+        }
+
+        .vote-count {
+            font-size: 20px;
+            margin-top: 20px;
+        }
+
+        .windows11-border {
+            border: 1px solid #C4C4C4;
+            border-radius: 8px;
+            padding: 20px;
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: #FFF;
+            box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+    <title>Vote Count</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>
+    <style>
+        /* CSS styles for the voting UI */
+        /* ... Your CSS styles here ... */
+    </style>
+</head>
+<body>
+    <h1>Vote Count</h1>
+
+    <div class="tab-buttons">
+        <!-- Tab buttons for different categories -->
+        <!-- ... Your tab buttons here ... -->
+    </div>
+
+    <div class="candidate-sections">
+        <!-- Candidate sections for different categories -->
+        <!-- ... Your candidate sections here ... -->
+    </div>
+
+    <div class="messages">
+        <p id="success-message"></p>
+        <p id="error-message"></p>
+    </div>
+
+    <div class="actions">
+        <button onclick="saveVotes()">Save Votes</button>
+    </div>
+    <script>
+        // JavaScript code for the voting system
+
+        var candidateVotes = {
+            "Head Boy": {
+                "Candidate 1": 0,
+                "Candidate 2": 0,
+                "Candidate 3": 0,
+                "Candidate 4": 0
+            },
+            "Head Girl": {
+                "Candidate 1": 0,
+                "Candidate 2": 0,
+                "Candidate 3": 0,
+                "Candidate 4": 0
+            },
+            "Sports Captain": {
+                "Candidate 1": 0,
+                "Candidate 2": 0,
+                "Candidate 3": 0,
+                "Candidate 4": 0
+            },
+            "Knights Captain": {
+                "Candidate 1": 0,
+                "Candidate 2": 0,
+                "Candidate 3": 0,
+                "Candidate 4": 0
+            },
+            "Spartans Captain": {
+                "Candidate 1": 0,
+                "Candidate 2": 0,
+                "Candidate 3": 0,
+                "Candidate 4": 0
+            },
+            "Vikings Captain": {
+                "Candidate 1": 0,
+                "Candidate 2": 0,
+                "Candidate 3": 0,
+                "Candidate 4": 0
+            },
+            "Samurais Captain": {
+                "Candidate 1": 0,
+                "Candidate 2": 0,
+                "Candidate 3": 0,
+                "Candidate 4": 0
+            },
+            "CCA Captain": {
+                "Candidate 1": 0,
+                "Candidate 2": 0,
+                "Candidate 3": 0,
+                "Candidate 4": 0
+            }
+        };
+        function selectTab(tabName) {
+            activeTab = tabName;
+            updateUI();
+        }
+
+        function vote(candidateName) {
+            candidateVotes[activeTab][candidateName]++;
+            updateUI();
+        }
+
+        function updateUI() {
+            var tabButtons = document.getElementsByClassName("tab-button");
+            for (var i = 0; i < tabButtons.length; i++) {
+                var tabButton = tabButtons[i];
+                if (tabButton.innerHTML === activeTab) {
+                    tabButton.classList.add("active");
+                } else {
+                    tabButton.classList.remove("active");
+                }
+            }
+
+            var candidateButtons = document.getElementsByClassName("candidate-button");
+            for (var j = 0; j < candidateButtons.length; j++) {
+                var candidateButton = candidateButtons[j];
+                var candidateName = candidateButton.innerHTML;
+                var voteCount = candidateVotes[activeTab][candidateName];
+                candidateButton.innerHTML = candidateName + " (" + voteCount + " votes)";
+                if (candidateName in candidateVotes[activeTab]) {
+                    candidateButton.classList.add("active");
+                } else {
+                    candidateButton.classList.remove("active");
+                }
+            }
+        }
+
+        function saveVotes() {
+            var votesJson = JSON.stringify(candidateVotes);
+            var blob = new Blob([votesJson], { type: "application/json" });
+            saveAs(blob, "votes.json");
+        }
+
+        updateUI();
+
+        var activeTab = "Head Boy";
+
+        function selectTab(tabName) {
+            activeTab = tabName;
+            updateUI();
+        }
+
+        function vote(candidateName) {
+            candidateVotes[activeTab][candidateName]++;
+            updateUI();
+        }
+
+        function updateUI() {
+            var tabButtons = document.getElementsByClassName("tab-button");
+            for (var i = 0; i < tabButtons.length; i++) {
+                var tabButton = tabButtons[i];
+                if (tabButton.innerHTML === activeTab) {
+                    tabButton.classList.add("active");
+                } else {
+                    tabButton.classList.remove("active");
+                }
+            }
+
+            var candidateButtons = document.getElementsByClassName("candidate-button");
+            for (var j = 0; j < candidateButtons.length; j++) {
+                var candidateButton = candidateButtons[j];
+                var candidateName = candidateButton.innerHTML;
+                var voteCount = candidateVotes[activeTab][candidateName];
+                candidateButton.innerHTML = candidateName + " (" + voteCount + " votes)";
+                if (candidateName in candidateVotes[activeTab]) {
+                    candidateButton.classList.add("active");
+                } else {
+                    candidateButton.classList.remove("active");
+                }
+            }
+        }
+        function saveVotes() {
+            var votesJson = JSON.stringify(candidateVotes);
+            var blob = new Blob([votesJson], { type: "application/json" });
+            var a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = "votes.json";
+            a.click();
+        }
+
+        updateUI();
+
+        function selectTab(field) {
+            // Remove active class from all tab buttons
+            var tabButtons = document.getElementsByClassName("tab-button");
+            for (var i = 0; i < tabButtons.length; i++) {
+                tabButtons[i].classList.remove("active");
+            }
+            // Add active class to the selected tab button
+            event.target.classList.add("active");
+
+            // Hide all candidate sections
+            var candidateSections = document.getElementsByClassName("candidate-section");
+            for (var i = 0; i < candidateSections.length; i++) {
+                candidateSections[i].style.display = "none";
+            }
+            // Show the selected candidate section
+            document.getElementById("candidate-section-" + field.replace(" ", "-")).style.display = "block";
+        }
+
+        function vote(field, candidate) {
+            var selectedCandidate = document.querySelector(".candidate-button.active");
+            if (selectedCandidate && selectedCandidate.textContent === candidate) {
+                // Remove active class and decrease vote count if the same candidate is selected again
+                selectedCandidate.classList.remove("active");
+                candidateVotes[field][candidate]--;
+            } else {
+                // Remove active class from all buttons
+                var buttons = document.getElementsByClassName("candidate-button");
+                for (var i = 0; i < buttons.length; i++) {
+                    buttons[i].classList.remove("active");
+                }
+                // Add active class to the selected button and increase vote count
+                event.target.classList.add("active");
+                candidateVotes[field][candidate]++;
+            }
+        }
+
+        function submitVote(field) {
+            var selectedCandidate = document.querySelector(".candidate-button.active");
+            if (selectedCandidate) {
+                var candidate = selectedCandidate.textContent;
+                // Reset the selected candidate and remove active class from buttons
+                selectedCandidate.classList.remove("active");
+                // Clear the success and error messages
+                document.getElementById("success-message").textContent = "";
+                document.getElementById("error-message").textContent = "";
+                // Update the vote count for the selected candidate
+                document.getElementById("vote-count-" + field.replace(" ", "-") + "-" + candidate.replace(" ", "-")).textContent = candidateVotes[field][candidate];
+                // Display a success message
+                document.getElementById("success-message").textContent = "Vote submitted successfully!";
+            } else {
+                // Display an error message if no candidate is selected
+                document.getElementById("error-message").textContent = "Please select a candidate before submitting your vote.";
+            }
+        }
+    </script>
+    </head>
+    <body>
+        <div class="windows11-border">
+            <h1>Vote for Your Favorite Candidates</h1>
+            <div id="tabs">
+                <button class="tab-button active" onclick="selectTab('Head Boy')">Head Boy</button>
+                <button class="tab-button" onclick="selectTab('Head Girl')">Head Girl</button>
+                <button class="tab-button" onclick="selectTab('Sports Captain')">Sports Captain</button>
+                <button class="tab-button" onclick="selectTab('Knights Captain')">Knights Captain</button>
+                <button class="tab-button" onclick="selectTab('Spartans Captain')">Spartans Captain</button>
+                <button class="tab-button" onclick="selectTab('Vikings Captain')">Vikings Captain</button>
+                <button class="tab-button" onclick="selectTab('Samurais Captain')">Samurais Captain</button>
+                <button class="tab-button" onclick="selectTab('CCA Captain')">CCA Captain</button>
+            </div>
+
+            <div id="candidate-section-Head-Boy" class="candidate-section">
+                <h2>Head Boy Candidates</h2>
+                <button class="candidate-button" onclick="vote('Head Boy', 'Candidate 1')">Candidate 1</button>
+                <button class="candidate-button" onclick="vote('Head Boy', 'Candidate 2')">Candidate 2</button>
+                <button class="candidate-button" onclick="vote('Head Boy', 'Candidate 3')">Candidate 3</button>
+                <button class="candidate-button" onclick="vote('Head Boy', 'Candidate 4')">Candidate 4</button>
+                <button class="submit-button" onclick="submitVote('Head Boy')">Submit Vote</button>
+                <p id="success-message" class="success-message"></p>
+                <p id="error-message" class="error-message"></p>
+                <div class="vote-count">
+                    <h3>Vote Count for Head Boy</h3>
+                    <p>Candidate 1: <span id="vote-count-Head-Boy-Candidate-1">0</span></p>
+                    <p>Candidate 2: <span id="vote-count-Head-Boy-Candidate-2">0</span></p>
+                    <p>Candidate 3: <span id="vote-count-Head-Boy-Candidate-3">0</span></p>
+                    <p>Candidate 4: <span id="vote-count-Head-Boy-Candidate-4">0</span></p>
+                </div>
+            </div>
+
+            <div id="candidate-section-Head-Girl" class="candidate-section" style="display: none;">
+                <h2>Head Girl Candidates</h2>
+                <button class="candidate-button" onclick="vote('Head Girl', 'Candidate 1')">Candidate 1</button>
+                <button class="candidate-button" onclick="vote('Head Girl', 'Candidate 2')">Candidate 2</button>
+                <button class="candidate-button" onclick="vote('Head Girl', 'Candidate 3')">Candidate 3</button>
+                <button class="candidate-button" onclick="vote('Head Girl', 'Candidate 4')">Candidate 4</button>
+                <button class="submit-button" onclick="submitVote('Head Girl')">Submit Vote</button>
+                <p id="success-message" class="success-message"></p>
+                <p id="error-message" class="error-message"></p>
+                <div class="vote-count">
+                    <h3>Vote Count for Head Girl</h3>
+                    <p>Candidate 1: <span id="vote-count-Head-Girl-Candidate-1">0</span></p>
+                    <p>Candidate 2: <span id="vote-count-Head-Girl-Candidate-2">0</span></p>
+                    <p>Candidate 3: <span id="vote-count-Head-Girl-Candidate-3">0</span></p>
+                    <p>Candidate 4: <span id="vote-count-Head-Girl-Candidate-4">0</span></p>
+                </div>
+            </div>
+
+            <div id="candidate-section-Sports-Captain" class="candidate-section" style="display: none;">
+                <h2>Sports Captain Candidates</h2>
+                <button class="candidate-button" onclick="vote('Sports Captain', 'Candidate 1')">Candidate 1</button>
+                <button class="candidate-button" onclick="vote('Sports Captain', 'Candidate 2')">Candidate 2</button>
+                <button class="candidate-button" onclick="vote('Sports Captain', 'Candidate 3')">Candidate 3</button>
+                <button class="candidate-button" onclick="vote('Sports Captain', 'Candidate 4')">Candidate 4</button>
+                <button class="submit-button" onclick="submitVote('Sports Captain')">Submit Vote</button>
+                <p id="success-message" class="success-message"></p>
+                <p id="error-message" class="error-message"></p>
+                <div class="vote-count">
+                    <h3>Vote Count for Sports Captain</h3>
+                    <p>Candidate 1: <span id="vote-count-Sports-Captain-Candidate-1">0</span></p>
+                    <p>Candidate 2: <span id="vote-count-Sports-Captain-Candidate-2">0</span></p>
+                    <p>Candidate 3: <span id="vote-count-Sports-Captain-Candidate-3">0</span></p>
+                    <p>Candidate 4: <span id="vote-count-Sports-Captain-Candidate-4">0</span></p>
+                </div>
+            </div>
+
+            <div id="candidate-section-Knights-Captain" class="candidate-section" style="display: none;">
+                <h2>Knights Captain Candidates</h2>
+                <button class="candidate-button" onclick="vote('Knights Captain', 'Candidate 1')">Candidate 1</button>
+                <button class="candidate-button" onclick="vote('Knights Captain', 'Candidate 2')">Candidate 2</button>
+                <button class="candidate-button" onclick="vote('Knights Captain', 'Candidate 3')">Candidate 3</button>
+                <button class="candidate-button" onclick="vote('Knights Captain', 'Candidate 4')">Candidate 4</button>
+                <button class="submit-button" onclick="submitVote('Knights Captain')">Submit Vote</button>
+                <p id="success-message" class="success-message"></p>
+                <p id="error-message" class="error-message"></p>
+                <div class="vote-count">
+                    <h3>Vote Count for Knights Captain</h3>
+                    <p>Candidate 1: <span id="vote-count-Knights-Captain-Candidate-1">0</span></p>
+                    <p>Candidate 2: <span id="vote-count-Knights-Captain-Candidate-2">0</span></p>
+                    <p>Candidate 3: <span id="vote-count-Knights-Captain-Candidate-3">0</span></p>
+                    <p>Candidate 4: <span id="vote-count-Knights-Captain-Candidate-4">0</span></p>
+                </div>
+            </div>
+
+            <div id="candidate-section-Spartans-Captain" class="candidate-section" style="display: none;">
+                <h2>Spartans Captain Candidates</h2>
+                <button class="candidate-button" onclick="vote('Spartans Captain', 'Candidate 1')">Candidate 1</button>
+                <button class="candidate-button" onclick="vote('Spartans Captain', 'Candidate 2')">Candidate 2</button>
+                <button class="candidate-button" onclick="vote('Spartans Captain', 'Candidate 3')">Candidate 3</button>
+                <button class="candidate-button" onclick="vote('Spartans Captain', 'Candidate 4')">Candidate 4</button>
+                <button class="submit-button" onclick="submitVote('Spartans Captain')">Submit Vote</button>
+                <p id="success-message" class="success-message"></p>
+                <p id="error-message" class="error-message"></p>
+                <div class="vote-count">
+                    <h3>Vote Count for Spartans Captain</h3>
+                    <p>Candidate 1: <span id="vote-count-Spartans-Captain-Candidate-1">0</span></p>
+                    <p>Candidate 2: <span id="vote-count-Spartans-Captain-Candidate-2">0</span></p>
+                    <p>Candidate 3: <span id="vote-count-Spartans-Captain-Candidate-3">0</span></p>
+                    <p>Candidate 4: <span id="vote-count-Spartans-Captain-Candidate-4">0</span></p>
+                </div>
+            </div>
+
+            <div id="candidate-section-Vikings-Captain" class="candidate-section" style="display: none;">
+                <h2>Vikings Captain Candidates</h2>
+                <button class="candidate-button" onclick="vote('Vikings Captain', 'Candidate 1')">Candidate 1</button>
+                <button class="candidate-button" onclick="vote('Vikings Captain', 'Candidate 2')">Candidate 2</button>
+                <button class="candidate-button" onclick="vote('Vikings Captain', 'Candidate 3')">Candidate 3</button>
+                <button class="candidate-button" onclick="vote('Vikings Captain', 'Candidate 4')">Candidate 4</button>
+                <button class="submit-button" onclick="submitVote('Vikings Captain')">Submit Vote</button>
+                <p id="success-message" class="success-message"></p>
+                <p id="error-message" class="error-message"></p>
+                <div class="vote-count">
+                    <h3>Vote Count for Vikings Captain</h3>
+                    <p>Candidate 1: <span id="vote-count-Vikings-Captain-Candidate-1">0</span></p>
+                    <p>Candidate 2: <span id="vote-count-Vikings-Captain-Candidate-2">0</span></p>
+                    <p>Candidate 3: <span id="vote-count-Vikings-Captain-Candidate-3">0</span></p>
+                    <p>Candidate 4: <span id="vote-count-Vikings-Captain-Candidate-4">0</span></p>
+                </div>
+            </div>
+
+            <div id="candidate-section-Samurais-Captain" class="candidate-section" style="display: none;">
+                <h2>Samurais Captain Candidates</h2>
+                <button class="candidate-button" onclick="vote('Samurais Captain', 'Candidate 1')">Candidate 1</button>
+                <button class="candidate-button" onclick="vote('Samurais Captain', 'Candidate 2')">Candidate 2</button>
+                <button class="candidate-button" onclick="vote('Samurais Captain', 'Candidate 3')">Candidate 3</button>
+                <button class="candidate-button" onclick="vote('Samurais Captain', 'Candidate 4')">Candidate 4</button>
+                <button class="submit-button" onclick="submitVote('Samurais Captain')">Submit Vote</button>
+                <p id="success-message" class="success-message"></p>
+                <p id="error-message" class="error-message"></p>
+                <div class="vote-count">
+                    <h3>Vote Count for Samurais Captain</h3>
+                    <p>Candidate 1: <span id="vote-count-Samurais-Captain-Candidate-1">0</span></p>
+                    <p>Candidate 2: <span id="vote-count-Samurais-Captain-Candidate-2">0</span></p>
+                    <p>Candidate 3: <span id="vote-count-Samurais-Captain-Candidate-3">0</span></p>
+                    <p>Candidate 4: <span id="vote-count-Samurais-Captain-Candidate-4">0</span></p>
+                </div>
+            </div>
+
+            <div id="candidate-section-CCA-Captain" class="candidate-section" style="display: none;">
+                <h2>CCA Captain Candidates</h2>
+                <button class="candidate-button" onclick="vote('CCA Captain', 'Candidate 1')">Candidate 1</button>
+                <button class="candidate-button" onclick="vote('CCA Captain', 'Candidate 2')">Candidate 2</button>
+                <button class="candidate-button" onclick="vote('CCA Captain', 'Candidate 3')">Candidate 3</button>
+                <button class="candidate-button" onclick="vote('CCA Captain', 'Candidate 4')">Candidate 4</button>
+                <button class="submit-button" onclick="submitVote('CCA Captain')">Submit Vote</button>
+                <p id="success-message" class="success-message"></p>
+                <p id="error-message" class="error-message"></p>
+                <div class="vote-count">
+                    <h3>Vote Count for CCA Captain</h3>
+                    <p>Candidate 1: <span id="vote-count-CCA-Captain-Candidate-1">0</span></p>
+                    <p>Candidate 2: <span id="vote-count-CCA-Captain-Candidate-2">0</span></p>
+                    <p>Candidate 3: <span id="vote-count-CCA-Captain-Candidate-3">0</span></p>
+                    <p>Candidate 4: <span id="vote-count-CCA-Captain-Candidate-4">0</span></p>
+
+                </div>
+            </div>
+        </div>
+
+
+    </body>
+</html>
