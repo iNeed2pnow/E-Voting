@@ -89,20 +89,7 @@ function submitVote(field) {
     document.getElementById("success-message").textContent =
       "Vote submitted successfully for " + candidate + " as " + field;
 
-    $.ajax({
-      url: "/save_votes",
-      method: "POST",
-      data: {
-        field: field,
-        candidate: candidate,
-      },
-      success: function (response) {
-        console.log(response);
-      },
-      error: function (xhr, status, error) {
-        console.error(error);
-      },
-    });
+   
   } else {
     document.getElementById("error-message").textContent = "Please select a candidate";
   }
