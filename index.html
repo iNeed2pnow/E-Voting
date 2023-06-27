@@ -108,7 +108,6 @@
         }
     </style>
     <title>Vote Count</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>
     <style>
         /* CSS styles for the voting UI */
         /* ... Your CSS styles here ... */
@@ -266,14 +265,6 @@
                     candidateButton.classList.remove("active");
                 }
             }
-        }
-        function saveVotes() {
-            var votesJson = JSON.stringify(candidateVotes);
-            var blob = new Blob([votesJson], { type: "application/json" });
-            var a = document.createElement("a");
-            a.href = URL.createObjectURL(blob);
-            a.download = "votes.json";
-            a.click();
         }
 
         updateUI();
